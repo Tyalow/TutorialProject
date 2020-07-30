@@ -13,24 +13,22 @@ const unsigned int SCR_HEIGHT = 600;
 //Vertex shader source code (GLSL)
 const char* vertexShaderSource = "#version 330 core\n"
 "layout (location = 0) in vec3 aPos;\n"
+"layout (location = 1) in vec3 aColor;\n"
+"out vec3 ourColor;\n"
 "void main()\n"
 "{\n"
-"   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
+"   gl_Position = vec4(aPos, 1.0);\n"
+"   ourColor = aColor;\n"
 "}\0";
 //Fragment shader source code (GLSL)
 const char* fragmentShaderSource = "#version 330 core\n"
 "out vec4 FragColor;\n"
+"in vec3 ourColor;\n"
 "void main()\n"
 "{\n"
-"   FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
+"   FragColor = vec4(ourColor, 1.0);\n"
 "}\0";
-//Second fragment shader source code for yellow triangles (GLSL)
-const char* fragmentShaderSourceSecond = "#version 330 core\n"
-"out vec4 FragColor;\n"
-"void main()\n"
-"{\n"
-"   FragColor = vec4(1.0f, 1.0f, 0.0f, 1.0f);\n"
-"}\0";
+
 
 
 int main()
@@ -39,7 +37,7 @@ int main()
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-  
+
     //Create window object
     GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "LearnOpenGL", NULL, NULL);
     if (window == NULL)
@@ -86,17 +84,7 @@ int main()
         glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
         std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
     }
-    //Second Fragment Shader
-    unsigned int fragmentShaderSecond;
-    fragmentShaderSecond = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragmentShaderSecond, 1, &fragmentShaderSourceSecond, NULL);
-    glCompileShader(fragmentShaderSecond);
-    glGetShaderiv(fragmentShaderSecond, GL_COMPILE_STATUS, &success);
-    if (!success)
-    {
-        glGetShaderInfoLog(fragmentShaderSecond, 512, NULL, infoLog);
-        std::cout << "ERROR::SHADER::FRAGMENT_SECOND::COMPILATION_FAILED\n" << infoLog << std::endl;
-    }
+  
 
     //Shader program object
     unsigned int shaderProgram;
@@ -111,31 +99,17 @@ int main()
         glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
         std::cout << "ERROR::SHADER::PROGRAM_OBJECT::LINK_FAILED\n" << infoLog << std::endl;
     }
-    //Second program object
-    unsigned int shaderProgramSecond;
-    shaderProgramSecond = glCreateProgram();
-    //Attach shaders to program object and link them
-    glAttachShader(shaderProgramSecond, vertexShader);
-    glAttachShader(shaderProgramSecond, fragmentShaderSecond);
-    glLinkProgram(shaderProgramSecond);
-    //Check if linking was successful
-    glGetProgramiv(shaderProgramSecond, GL_LINK_STATUS, &success);
-    if (!success) {
-        glGetProgramInfoLog(shaderProgramSecond, 512, NULL, infoLog);
-        std::cout << "ERROR::SHADER_SECOND::PROGRAM_OBJECT::LINK_FAILED\n" << infoLog << std::endl;
-    }
-    //Delete the vertex and frame shaders as they are linked in already
-    glDeleteShader(fragmentShaderSecond);
+    //Can delete vertex and fragment shader now since program object is built with their info encapsulated
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
     
 
     //Triangle vertices for EBO
     float vertices[] = {
-     0.5f,  0.5f, 0.0f,  // top right
-     0.5f, -0.5f, 0.0f,  // bottom right
-    -0.5f, -0.5f, 0.0f,  // bottom left
-    -0.5f,  0.5f, 0.0f   // top left 
+     0.5f,  0.5f, 0.0f, 1.0f, 0.0f, 0.0f, // top right
+     0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, // bottom right
+    -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, // bottom left
+    -0.5f,  0.5f, 0.0f, 0.0f, 0.0f, 0.0f  // top left 
     };
     unsigned int indices[] = {
         0, 1, 3,   // first triangle
@@ -143,14 +117,14 @@ int main()
     };
     //More Triangles but for VBO
     float vertices2[] = {
-        //First Triangle
-        0.5f, 0.5f, 0.0f,
-        1.0f, 0.0f, 0.0f,
-        0.5f, -0.5f, 0.0f,
+        //First Triangle      Colors   
+        0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f,
+        1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+        0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f,
         //Second Triangle
-        -0.5f,  0.5f, 0.0f,
-        -1.0f, 0.0f, 0.0f,
-        -0.5f, -0.5f, 0.0f
+        -0.5f,  0.5f, 0.0f, 1.0f, 0.0f, 0.0f,
+        -1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+        -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f
     };
 
     //Define Vertex Array Object and bind
@@ -170,15 +144,17 @@ int main()
     //Load index information into EBO
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
     //How to interpret vertex data (per vertex attribute)
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
     //Enable the vertex attribute
     glEnableVertexAttribArray(0);
+    //Color attribute, last input of attribpointer is the offset, second last input is the stride(or stagger between inputs)
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
     //Unbinding active objects, EBO must be unbound after VAO because VAO stores bind calls for EBO
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
-    
     //Define second VAO
     unsigned int VAO_SECOND;
     glGenVertexArrays(1, &VAO_SECOND);
@@ -189,13 +165,16 @@ int main()
     glBindBuffer(GL_ARRAY_BUFFER, VBO_SECOND);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices2), vertices2, GL_STATIC_DRAW);
     //Configure Vertex Attribs
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    //Position attribute
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
+    //Color attribute
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3* sizeof(float)));
+    glEnableVertexAttribArray(1);
     //Unbind
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     
-
     //Render loop
     while (!glfwWindowShouldClose(window))
     {
@@ -206,15 +185,13 @@ int main()
         glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        //Draw first triangles
         glUseProgram(shaderProgram);
         glBindVertexArray(VAO);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
         //Draw second triangles
-        glUseProgram(shaderProgramSecond);
         glBindVertexArray(VAO_SECOND);
         glDrawArrays(GL_TRIANGLES, 0, 6);
-        //Would unbind between render objects here
+        
         glBindVertexArray(0);
 
         //Swap buffers and poll IO events (keys press, mouse moved, etc)
