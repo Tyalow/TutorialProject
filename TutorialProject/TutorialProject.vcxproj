@@ -25,6 +25,10 @@
   <ItemGroup>
     <ClInclude Include="shader_s.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="shader.fs" />
+    <None Include="shader.vs" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <ProjectGuid>{B77FC41F-D289-4D68-AC30-79AB2964FE00}</ProjectGuid>

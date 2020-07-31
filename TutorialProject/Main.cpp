@@ -39,6 +39,7 @@ int main()
     }
 
     Shader ourShader("shader.vs", "shader.fs");
+    
 
     //Triangle vertices for EBO
     float vertices[] = {
@@ -122,6 +123,9 @@ int main()
         glClear(GL_COLOR_BUFFER_BIT);
 
         ourShader.use();
+        float timeValue = glfwGetTime();
+        float offSetValue = sin(timeValue) / 2.0f;
+        ourShader.setFloat("offset", offSetValue);
         glBindVertexArray(VAO);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
         //Draw second triangles
