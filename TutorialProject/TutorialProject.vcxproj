@@ -22,6 +22,9 @@
     <ClCompile Include="..\..\..\..\Desktop\glad.c" />
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="shader_s.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <ProjectGuid>{B77FC41F-D289-4D68-AC30-79AB2964FE00}</ProjectGuid>
@@ -80,7 +83,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\Users\Tyler\Desktop\OpenGL\Includes;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Users\Tyler\Desktop\OpenGL\Includes;C:\Users\Tyler\source\repos\TutorialProject\TutorialProject;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Users\Tyler\Desktop\OpenGL\Libraries;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
