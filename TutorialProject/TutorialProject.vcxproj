@@ -22,13 +22,6 @@
     <ClCompile Include="..\..\..\..\Desktop\glad.c" />
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="..\..\..\..\Desktop\shader.fs" />
-    <None Include="..\..\..\..\Desktop\shader.vs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\..\..\Desktop\shader_s.h" />
-  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <ProjectGuid>{B77FC41F-D289-4D68-AC30-79AB2964FE00}</ProjectGuid>

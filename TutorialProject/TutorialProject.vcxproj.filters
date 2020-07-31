@@ -13,9 +13,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Source Files\Shaders">
-      <UniqueIdentifier>{6a3889d5-632f-42dd-aca4-4558b51d736d}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -24,18 +21,5 @@
     <ClCompile Include="..\..\..\..\Desktop\glad.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\..\..\..\Desktop\shader.vs">
-      <Filter>Source Files\Shaders</Filter>
-    </None>
-    <None Include="..\..\..\..\Desktop\shader.fs">
-      <Filter>Source Files\Shaders</Filter>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\..\..\Desktop\shader_s.h">
-      <Filter>Source Files\Shaders</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>
