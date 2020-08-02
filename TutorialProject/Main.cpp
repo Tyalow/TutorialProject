@@ -1,7 +1,6 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-
-#include <stb_image.h>
+#include <image_loader/stb_image.h>
 #include <shader_s.h>
 
 #include <iostream>
