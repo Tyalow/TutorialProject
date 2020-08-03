@@ -48,5 +48,8 @@
     <Image Include="container.jpg">
       <Filter>Source Files</Filter>
     </Image>
+    <Image Include="examplebehaviour.gif">
+      <Filter>Source Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

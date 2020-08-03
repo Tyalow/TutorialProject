@@ -33,6 +33,7 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="container.jpg" />
+    <Image Include="examplebehaviour.gif" />
     <Image Include="face.png" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
