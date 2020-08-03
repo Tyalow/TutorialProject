@@ -1,5 +1,8 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #include <image_loader_library/stb_image.h>
 #include <shader_s.h>
 
@@ -136,6 +139,8 @@ int main()
     ourShader.setInt("texture1", 0);
     ourShader.setInt("texture2", 1);
 
+    //Rotation matrix
+    glm::mat4 rotator = glm::mat4(1.0f);
 
     //Render loop
     while (!glfwWindowShouldClose(window))
@@ -151,9 +156,14 @@ int main()
         float timeValue = glfwGetTime();
         float offSetValuex = sin(timeValue) / 2.0f;
         float offSetValuey = cos(timeValue) / 2.0f;
+        //Send translational value for circular movement to shader
         ourShader.setFloat("offsetx", offSetValuex);
         ourShader.setFloat("offsety", offSetValuey);
         ourShader.setFloat("mixValue", mixValue);
+        //Set rotation matrix to identity matrix so rotations don't compound
+        rotator = glm::mat4(1.0f);
+        rotator = glm::rotate(rotator, (float)timeValue, glm::vec3(0.0, 0.0, 1.0));
+        ourShader.setMat4("transform", rotator);
 
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, texture1);
