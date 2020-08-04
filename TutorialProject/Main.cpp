@@ -47,16 +47,62 @@ int main()
     //Build shader object
     Shader ourShader("shader.vs", "shader.fs");
 
-    //Triangle vertices for EBO
+    //Triangle vertices for VBO
     float vertices[] = {
-         0.5f,  0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 2.0f, 2.0f,// top right
-         0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 2.0f, 0.0f,// bottom right
-        -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,// bottom left
-        -0.5f,  0.5f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 2.0f// top left 
+    -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+     0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
+     0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+     0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+    -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+    -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+
+    -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+     0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+     0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+     0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+    -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
+    -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+
+    -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+    -0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+    -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+    -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+    -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+    -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+     0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+     0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+     0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+     0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+     0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+     0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+    -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+     0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
+     0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+     0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+    -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+    -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+
+    -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+     0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+     0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+     0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+    -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
+    -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
     };
-    unsigned int indices[] = {
-        0, 1, 3,   // first triangle
-        1, 2, 3    // second triangle
+    //Positions for each cube of vertices
+    glm::vec3 cubePositions[] = {
+    glm::vec3(0.0f,  0.0f,  0.0f),
+    glm::vec3(1.5f,  0.2f, -1.5f),
+    glm::vec3(2.0f,  5.0f, -15.0f),   
+    glm::vec3(-3.8f, -2.0f, -12.3f),
+    glm::vec3(2.4f, -0.4f, -3.5f),
+    glm::vec3(-1.7f,  3.0f, -7.5f),
+    glm::vec3(-1.5f, -2.2f, -2.5f),
+    glm::vec3(1.3f, -2.0f, -2.5f),
+    glm::vec3(1.5f,  2.0f, -2.5f),
+    glm::vec3(-1.3f,  1.0f, -1.5f)
     };
 
     //Define Vertex Array Object and bind
@@ -69,26 +115,16 @@ int main()
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     //Load vertex information into GPU memory in buffer
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-    //Define Element Buffer Object, bind to GL_ELEMENT_ARRAY_BUFFER
-    unsigned int EBO;
-    glGenBuffers(1, &EBO);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    //Load index information into EBO
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
     //How to interpret vertex data (per vertex attribute)
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
     //Enable the vertex attribute
     glEnableVertexAttribArray(0);
-    //Color attribute, last input of attribpointer is the offset, second last input is the stride(or stagger between inputs)
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-    glEnableVertexAttribArray(1);
     //Texture attribute
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
-    glEnableVertexAttribArray(2);
-    //Unbinding active objects, EBO must be unbound after VAO because VAO stores bind calls for EBO
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
+
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
     //Load in textures
     unsigned int texture1;
@@ -135,12 +171,16 @@ int main()
     }
     stbi_image_free(data);
 
+    //Tie texture IDs to uniforms
     ourShader.use();
     ourShader.setInt("texture1", 0);
     ourShader.setInt("texture2", 1);
-
-    //Rotation matrix
-    glm::mat4 rotator = glm::mat4(1.0f);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, texture1);
+    glActiveTexture(GL_TEXTURE1);
+    glBindTexture(GL_TEXTURE_2D, texture2);
+    //Enable depth testing
+    glEnable(GL_DEPTH_TEST);
 
     //Render loop
     while (!glfwWindowShouldClose(window))
@@ -150,30 +190,45 @@ int main()
 
         //Rendering commands
         glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
+        //Clear color and depth buffers, or info piles up
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         glBindVertexArray(VAO);
         float timeValue = glfwGetTime();
-        float offSetValuex = sin(timeValue) / 2.0f;
-        float offSetValuey = cos(timeValue) / 2.0f;
-        //Send translational value for circular movement to shader
-        ourShader.setFloat("offsetx", offSetValuex);
-        ourShader.setFloat("offsety", offSetValuey);
-        ourShader.setFloat("mixValue", mixValue);
-        //Set rotation matrix to identity matrix so rotations don't compound
-        rotator = glm::mat4(1.0f);
-        rotator = glm::rotate(rotator, (float)timeValue, glm::vec3(0.0, 0.0, 1.0));
-        ourShader.setMat4("transform", rotator);
 
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, texture1);
-        glActiveTexture(GL_TEXTURE1);
-        glBindTexture(GL_TEXTURE_2D, texture2);
+        //Create and set transformation matrices then connect so shader uniforms
+        glm::mat4 view = glm::mat4(1.0f);
+        glm::mat4 projection = glm::mat4(1.0f);
 
-        ourShader.use();
+        view = glm::translate(view, glm::vec3(0.0f, 0.0f, -5.0f));
+        projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
 
-        //Draw EBO contents
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        
+        ourShader.setMat4("view", view);
+        ourShader.setMat4("projection", projection);
+        ourShader.setFloat("mixValue", mixValue); 
+
+        //Drawing loop for the cubes
+        for (unsigned int i = 0; i < 10; i++)
+        {
+            glm::mat4 model = glm::mat4(1.0f);
+            model = glm::translate(model, cubePositions[i]);
+            //Spin even indexed cubes over time, offset all cube spins
+            if ((i+2)%2==0)
+            {
+                model = glm::rotate(model, glm::radians((timeValue * 10.0f) + (i * 20.0f)), glm::vec3(1.0f, 1.0f, 0.0f));
+            }
+            else
+            {
+                model = glm::rotate(model, glm::radians(i * 20.0f), glm::vec3(1.0f, 1.0f, 0.0f));
+            }
+            
+            ourShader.setMat4("model", model);
+
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+        }
+
+        
 
         //Swap buffers and poll IO events (keys press, mouse moved, etc)
         glfwSwapBuffers(window);
@@ -183,7 +238,6 @@ int main()
     //De-allocate resources since rendering has been stopped
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
-    glDeleteBuffers(1, &EBO);
 
     //Clear all allocated resources to glfw
     glfwTerminate();
