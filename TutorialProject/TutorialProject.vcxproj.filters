@@ -32,12 +32,21 @@
     <ClInclude Include="stb_image.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="camera.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="shader.fs">
       <Filter>Source Files</Filter>
     </None>
     <None Include="shader.vs">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="light_shader.fs">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="light_shader.vs">
       <Filter>Source Files</Filter>
     </None>
   </ItemGroup>
