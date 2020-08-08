@@ -37,6 +37,8 @@ float deltaTime = 0.0;
 //Light position and color
 glm::vec3 lightColor(1.0f, 1.0f, 1.0f);
 glm::vec3 lightPos(0.0f, 2.5f, -4.0f);
+float ambientLightStrength = 0.1f;
+float specularLightStrength = 0.5f;
 
 int main()
 {
@@ -261,12 +263,14 @@ int main()
     stbi_image_free(data);
 
     
-    //Setting light variable
+    //Set constant uniforms
     lightShader.use();
     lightShader.setVec3("lightColor", lightColor);
-    //Tie texture IDs to uniforms
     ourShader.use();
     ourShader.setVec3("lightColor", lightColor);
+    ourShader.setFloat("specularLightStrength", specularLightStrength);
+    ourShader.setFloat("ambientLightStrength", ambientLightStrength);
+    //Tie texture IDs to uniforms
     ourShader.setInt("texture1", 0);
     ourShader.setInt("texture2", 1);
     glActiveTexture(GL_TEXTURE0);
@@ -301,6 +305,8 @@ int main()
         ourShader.setMat4("view", view);
 
         ourShader.setFloat("mixValue", mixValue); 
+        ourShader.setVec3("lightPos", lightPos);
+        ourShader.setVec3("viewPos", camera.Position);
 
         //Drawing loop for the cubes
         for (unsigned int i = 0; i < 10; i++)
