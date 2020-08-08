@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\Examplegifs">
+      <UniqueIdentifier>{fa0a6278-d350-4648-b6ba-1e286ba75ba3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -58,10 +61,10 @@
       <Filter>Source Files</Filter>
     </Image>
     <Image Include="examplebehaviour.gif">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Examplegifs</Filter>
     </Image>
     <Image Include="phongDisplay.gif">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Examplegifs</Filter>
     </Image>
   </ItemGroup>
 </Project>
