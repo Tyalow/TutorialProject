@@ -38,6 +38,7 @@
     <Image Include="container.jpg" />
     <Image Include="examplebehaviour.gif" />
     <Image Include="face.png" />
+    <Image Include="phongDisplay.gif" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
