@@ -4,8 +4,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <image_loader_library/stb_image.h>
-#include <shader_s.h>
-#include <camera.h>
+#include "shader_s.h"
+#include "camera.h"
 
 #include <iostream>
 
@@ -34,9 +34,8 @@ float lastY = SCR_HEIGHT / 2.0;
 float lastFrame = 0.0;
 float deltaTime = 0.0;
 
-//Light position and color
+//Light color
 glm::vec3 lightColor(1.0f, 1.0f, 1.0f);
-glm::vec3 lightPos(0.0f, 2.5f, -4.0f);
 float ambientLightStrength = 0.1f;
 float specularLightStrength = 0.5f;
 
@@ -283,7 +282,14 @@ int main()
     //Render loop
     while (!glfwWindowShouldClose(window))
     {
-        float currentFrame = glfwGetTime();
+        float time = glfwGetTime();
+        //Light Position, set to move in a circle
+        glm::vec3 lightPos(0.0f, 2.5f, -4.0f);
+        float lightOffsetX = sin(time)*2;
+        float lightOffsetY = cos(time)*2;
+        lightPos = glm::vec3 (lightPos.x+lightOffsetX, lightPos.y + lightOffsetY, lightPos.z);
+
+        float currentFrame = time;
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
         //Input call
@@ -296,7 +302,6 @@ int main()
 
         ourShader.use();
         glBindVertexArray(VAO);
-        float timeValue = glfwGetTime();
         //Position setting for cubes
         glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
         ourShader.setMat4("projection", projection);
@@ -316,7 +321,7 @@ int main()
             //Spin even indexed cubes over time, offset all cube spins
             if ((i+2)%2==0)
             {
-                model = glm::rotate(model, glm::radians((timeValue * 10.0f) + (i * 20.0f)), glm::vec3(1.0f, 1.0f, 0.0f));
+                model = glm::rotate(model, glm::radians((time * 10.0f) + (i * 20.0f)), glm::vec3(1.0f, 1.0f, 0.0f));
             }
             else
             {
